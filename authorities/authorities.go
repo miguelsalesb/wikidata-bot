@@ -47,7 +47,7 @@ func GetAuthors(doneAuthorities chan bool) {
 	)
 
 	// Get data from the author's repository
-	for n := 8001; n < 1800000; n++ {
+	for n := 1; n < 1800000; n++ {
 		fmt.Println("\nAuthorities - ", n)
 		time.Sleep(350 * time.Millisecond)
 		if n%500 == 0 {

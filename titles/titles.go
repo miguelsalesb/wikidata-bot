@@ -97,7 +97,7 @@ func GetTitles(doneTitles chan bool) {
 	var wkOriginalTitleID WikiData
 	const empty = ""
 
-	for n := 51; n < 2400000; n++ {
+	for n := 1; n < 2400000; n++ {
 		time.Sleep(500 * time.Millisecond)
 		if n%500 == 0 {
 			time.Sleep(120 * time.Second)
