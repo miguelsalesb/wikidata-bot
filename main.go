@@ -5,18 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 	"wikidata/authorities"
 	"wikidata/db"
 	"wikidata/logs"
 	"wikidata/titles"
 )
-
-func check(e error) {
-	if e != nil {
-		// panic(e)
-		fmt.Println(e)
-	}
-}
 
 // This app gets the data of the Library authoritoes and bibliographic repositories
 // searches the author's names and titles in Wikidata in order to find out if that data already exists, and:
@@ -26,11 +20,23 @@ func check(e error) {
 func main() {
 
 	var (
-		errLog, errDB, errPing error
+		errLog, errDB, errPing                                         error
+		repTitlesFirst, repTitlesLast, repAuthorsFirst, repAuthorsLast int
 	)
 
 	var tables = []string{"authors", "titles", "occupations"}
-	// DBCon is the connection handle for the database
+
+	fmt.Print("Insert the number from the authors repository where you want to start and then press Enter \n ")
+	fmt.Scanln(&repAuthorsFirst)
+
+	fmt.Print("Insert the number from the authors repository where you want to finish and then press Enter \n ")
+	fmt.Scanln(&repAuthorsLast)
+
+	fmt.Print("Insert the number from the titles repository where you want to start and then press Enter \n ")
+	fmt.Scanln(&repTitlesFirst)
+
+	fmt.Print("Insert the number from the titles repository where you want to finish and then press Enter \n ")
+	fmt.Scanln(&repTitlesLast)
 
 	// write the logs in the logs.txt file
 	logs.File, errLog = os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
@@ -41,7 +47,7 @@ func main() {
 
 	// check if database exists
 	//if it doesn't exist, create it
-	// https://play.golang.org/p/jxza3pbqq9
+	// from: https://play.golang.org/p/jxza3pbqq9
 	const TEST_ROOT_URI = "root:@tcp(localhost:3306)/?charset=utf8mb4&autocommit=true"
 
 	dba, err := sql.Open("mysql", TEST_ROOT_URI)
@@ -90,10 +96,15 @@ func main() {
 	doneAuthorities := make(chan bool)
 	doneTitles := make(chan bool)
 	// https://medium.com/@ishagirdhar/import-cycles-in-golang-b467f9f0c5a0
-	go authorities.GetAuthors(doneAuthorities)
-	go titles.GetTitles(doneTitles)
+	go authorities.GetAuthors(doneAuthorities, repAuthorsFirst, repAuthorsLast)
+	go titles.GetTitles(doneTitles, repTitlesFirst, repTitlesLast)
 
 	<-doneAuthorities
 	<-doneTitles
 	// time.Sleep(60 * time.Second)
+
+	t := time.Now().Format("02-01-2006")
+	log.SetOutput(logs.File)
+	log.Printf("%v - The title repository was scrapped from record: %v to record %v", t, repAuthorsFirst, repAuthorsLast)
+	log.Printf("%v - The title repository was scrapped from record: %v to record %v", t, repTitlesFirst, repTitlesLast)
 }

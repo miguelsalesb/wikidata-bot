@@ -1,17 +1,1 @@
-2021/03/20 11:18:00 DATABASE CONNECTION FAILED:  dial tcp [::1]:3306: connectex: Nenhuma ligação pôde ser feita porque o computador de destino
-as recusou ativamente.
-2021/03/22 15:33:48 DATABASE CONNECTION FAILED:  dial tcp [::1]:3306: connectex: Nenhuma ligação pôde ser feita porque o computador de destino
-as recusou ativamente.
-2021/04/04 11:10:49 DATABASE CONNECTION FAILED:  dial tcp [::1]:3306: connectex: Nenhuma ligação pôde ser feita porque o computador de destino
-as recusou ativamente.
-2021/04/04 11:20:21 DATABASE CONNECTION FAILED:  dial tcp [::1]:3306: connectex: Nenhuma ligação pôde ser feita porque o computador de destino
-as recusou ativamente.
-2021/04/04 19:11:02 DATABASE CONNECTION FAILED:  Error 1045: Access denied for user 'root'@'localhost' (using password: NO)
-2021/04/06 12:13:27 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
-2021/04/06 12:15:49 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
-2021/04/06 12:18:27 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
-2021/04/06 13:17:03 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
-2021/04/06 13:27:30 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
-2021/04/06 13:28:03 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
-2021/04/06 13:36:07 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
-2021/04/06 13:38:10 DATABASE CONNECTION FAILED:  Error 1049: Unknown database 'wikidata'
+

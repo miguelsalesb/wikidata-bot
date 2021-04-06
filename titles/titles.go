@@ -92,12 +92,12 @@ func check(e error) {
 var dbName = "titles"
 var replacerTitle = strings.NewReplacer("<", "", ">", "", "'", "\\'", "«", "", "»", "", "º", "", "[", "", "]", "", "\"", "\\'")
 
-func GetTitles(doneTitles chan bool) {
+func GetTitles(doneTitles chan bool, repTitlesFirst int, repTitlesLast int) {
 
 	var wkOriginalTitleID WikiData
 	const empty = ""
 
-	for n := 1; n < 2400000; n++ {
+	for n := repTitlesFirst; n <= repTitlesLast; n++ {
 		time.Sleep(500 * time.Millisecond)
 		if n%500 == 0 {
 			time.Sleep(120 * time.Second)
