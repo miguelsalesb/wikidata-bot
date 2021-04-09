@@ -37,7 +37,7 @@ func check(e error) {
 	}
 }
 
-func GetAuthors(doneAuthorities chan bool, repAuthorsFirst int, repAuthorsLast int) {
+func GetAuthors(doneAuthorities chan bool, repAuthorsFirst string, repAuthorsLast string) {
 
 	var (
 		names, dates               []string
@@ -46,8 +46,11 @@ func GetAuthors(doneAuthorities chan bool, repAuthorsFirst int, repAuthorsLast i
 
 	)
 
+	repAuthorFirst, _ := strconv.Atoi(repAuthorsFirst)
+	repAuthorLast, _ := strconv.Atoi(repAuthorsLast)
+
 	// Get data from the author's repository
-	for n := repAuthorsFirst; n <= repAuthorsLast; n++ {
+	for n := repAuthorFirst; n <= repAuthorLast; n++ {
 		fmt.Println("\nAuthorities - ", n)
 		time.Sleep(450 * time.Millisecond)
 		// if n%500 == 0 {

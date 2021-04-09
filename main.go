@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 	"titles"
 	"wikidata/authorities"
@@ -21,7 +22,7 @@ func main() {
 
 	var (
 		errLog, errDB, errPing                                         error
-		repTitlesFirst, repTitlesLast, repAuthorsFirst, repAuthorsLast int
+		repTitlesFirst, repTitlesLast, repAuthorsFirst, repAuthorsLast string
 	)
 
 	var tables = []string{"authors", "titles", "occupations"}
@@ -96,8 +97,8 @@ func main() {
 	doneAuthorities := make(chan bool)
 	doneTitles := make(chan bool)
 	// https://medium.com/@ishagirdhar/import-cycles-in-golang-b467f9f0c5a0
-	go authorities.GetAuthors(doneAuthorities, repAuthorsFirst, repAuthorsLast)
-	go titles.GetTitles(doneTitles, repTitlesFirst, repTitlesLast)
+	go authorities.GetAuthors(doneAuthorities, strings.Trim(repAuthorsFirst, " "), strings.Trim(repAuthorsLast, " "))
+	go titles.GetTitles(doneTitles, strings.Trim(repTitlesFirst, " "), strings.Trim(repTitlesLast, " "))
 
 	<-doneAuthorities
 	<-doneTitles

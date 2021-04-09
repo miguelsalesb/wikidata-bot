@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"wikidata/db"
@@ -92,12 +93,14 @@ func check(e error) {
 var dbName = "titles"
 var replacerTitle = strings.NewReplacer("<", "", ">", "", "'", "\\'", "«", "", "»", "", "º", "", "[", "", "]", "", "\"", "\\'")
 
-func GetTitles(doneTitles chan bool, repTitlesFirst int, repTitlesLast int) {
+func GetTitles(doneTitles chan bool, repTitlesFirst string, repTitlesLast string) {
 
 	var wkOriginalTitleID WikiData
 	const empty = ""
+	repTitleFirst, _ := strconv.Atoi(repTitlesFirst)
+	repTitleLast, _ := strconv.Atoi(repTitlesLast)
 
-	for n := repTitlesFirst; n <= repTitlesLast; n++ {
+	for n := repTitleFirst; n <= repTitleLast; n++ {
 		time.Sleep(500 * time.Millisecond)
 		if n%500 == 0 {
 			time.Sleep(120 * time.Second)

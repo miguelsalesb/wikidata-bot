@@ -1,7 +1,6 @@
 package wiki
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -221,9 +220,7 @@ func ReturnItemProperty(prop string, QItem int, retrieved_date string, id_librar
 				},
 			},
 		}
-
 	return data
-
 }
 
 func ReturnTimeProperty(prop string, date string, retrieved_date string, id_library string) *PTime {
@@ -303,7 +300,6 @@ func ReturnTimeProperty(prop string, date string, retrieved_date string, id_libr
 				},
 			},
 		}
-	fmt.Println(data)
 	return data
 }
 
@@ -377,6 +373,5 @@ func ReturnStringProperty(prop string, retrieved_date string, id_library string)
 			},
 		},
 	}
-
 	return data
 }

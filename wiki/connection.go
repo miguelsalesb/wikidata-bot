@@ -113,3 +113,7 @@ func ConnectToWikidata(client http.Client) string {
 
 	return tokenCsfr
 }
+
+func InsertInitialWikiData() {
+
+}
