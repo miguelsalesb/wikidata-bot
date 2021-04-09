@@ -49,10 +49,10 @@ func GetAuthors(doneAuthorities chan bool, repAuthorsFirst int, repAuthorsLast i
 	// Get data from the author's repository
 	for n := repAuthorsFirst; n <= repAuthorsLast; n++ {
 		fmt.Println("\nAuthorities - ", n)
-		time.Sleep(350 * time.Millisecond)
-		if n%500 == 0 {
-			time.Sleep(120 * time.Second)
-		}
+		time.Sleep(450 * time.Millisecond)
+		// if n%500 == 0 {
+		// 	time.Sleep(60 * time.Second)
+		// }
 
 		urlMarcxchange := fmt.Sprintf("%s%d", "http://urn.bn.pt/nca/unimarc-authorities/marcxchange?id=", n) // web address of the authorities repository in the marcxchange format
 
@@ -417,7 +417,7 @@ func GetNacionality(urlMarcxchange string) string {
 func GetOccupations(urlMarcxchange string) string {
 	var occupations, occupationsFinal string
 	var occupationsArray []string
-	var replacer = strings.NewReplacer("\\", "", "'", "\\'")
+	var replacer = strings.NewReplacer("\\", "", "'", "\\'", "\"", "\\'")
 
 	res, err := http.Get(urlMarcxchange)
 	if err != nil {
@@ -584,14 +584,14 @@ func WriteAuthors(author Authors, dbs *sql.DB) {
 
 			nonCoincidOccupWithoutInstanceOf := strings.Join(nonCoinOccupWithoutInstanceOf, ",")
 			nonCoincidentaldOccupWithoutInstanceOf := strings.Trim(nonCoincidOccupWithoutInstanceOf, ",")
-			nonCoincidentalOccupationsWithoutInstanceOf = replacer.Replace(nonCoincidentaldOccupWithoutInstanceOf)
+			nonCoincidentalOccupationsWithoutInstanceOf = db.ReplacerDB.Replace(nonCoincidentaldOccupWithoutInstanceOf)
 		} else {
 			nonCoinOccup, nonCoinOccupWithoutInstanceOf = nil, nil
 		}
 
 		// Take away the multiples commas
-		replacerNonCoincidental := strings.NewReplacer(",,", "")
-		nonCoincidentalOccupationsWithoutInstanceOf = replacerNonCoincidental.Replace(nonCoincidentalOccupationsWithoutInstanceOf)
+		// replacerNonCoincidental := strings.NewReplacer(",,", "")
+		nonCoincidentalOccupationsWithoutInstanceOf = db.ReplacerDB.Replace(nonCoincidentalOccupationsWithoutInstanceOf)
 
 		// Calculation of the probability of the author already existing in Wikidata
 

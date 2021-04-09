@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 	"time"
+	"titles"
 	"wikidata/authorities"
 	"wikidata/db"
 	"wikidata/logs"
-	"wikidata/titles"
 )
 
 // This app gets the data of the Library authoritoes and bibliographic repositories

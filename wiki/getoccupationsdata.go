@@ -55,7 +55,6 @@ func GetOccupationsWiki(nonCoincidentalOccupations []string) ([]string, []string
 	const empty = ""
 	var occupArray = make([]string, 0, 4)
 	var occupArrayWithoutInstanceOf = make([]string, 0, 2)
-	var replacer = strings.NewReplacer(" ", "%20", "à", "a", "á", "a", "â", "a", "ã", "a", "ä", "a", "ç", "c", "è", "e", "é", "e", "ê", "e", "ë", "e", "ì", "i", "í", "i", "î", "i", "ï", "i", "ñ", "n", "ò", "o", "ó", "o", "ô", "o", "õ", "o", "ö", "o", "ù", "u", "ú", "u", "û", "u", "ü", "u", "ý", "y")
 
 	for x := 0; x < len(nonCoincidentalOccupations); x++ {
 

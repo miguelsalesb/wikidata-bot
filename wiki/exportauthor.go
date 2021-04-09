@@ -34,145 +34,11 @@ type A_Entity struct {
 }
 
 type A_Claims struct {
-	A_P5 []A_PItem   `json:"P5,omitempty"` // Entity type
-	A_P8 []A_PItem   `json:"P8,omitempty"` // Entity type
-	A_P1 []A_PTime   `json:"P1,omitempty"` // Time type
-	A_P2 []A_PTime   `json:"P2,omitempty"` // Time type
-	A_P6 []A_PString `json:"P6,omitempty"` // Entity type
-}
-
-type A_PTime struct {
-	A_Mainsnak   A_MainsnaksTime `json:"mainsnak,omitempty"`
-	A_Type       string          `json:"type,omitempty"`
-	A_Rank       string          `json:"rank,omitempty"`
-	A_References []A_References  `json:"references,omitempty"`
-}
-
-type A_PItem struct {
-	A_Mainsnak   A_MainsnaksItem `json:"mainsnak,omitempty"`
-	A_Type       string          `json:"type,omitempty"`
-	A_Rank       string          `json:"rank,omitempty"`
-	A_References []A_References  `json:"references,omitempty"`
-}
-
-type A_PString struct {
-	A_Mainsnak   A_MainsnaksString `json:"mainsnak,omitempty"`
-	A_Type       string            `json:"type,omitempty"`
-	A_Rank       string            `json:"rank,omitempty"`
-	A_References []A_References    `json:"references,omitempty"`
-}
-
-type A_MainsnaksTime struct {
-	A_Snaktype  string          `json:"snaktype,omitempty"`
-	A_Property  string          `json:"property,omitempty"`
-	A_Datatype  string          `json:"datatype,omitempty"`
-	A_Datavalue A_DatavalueTime `json:"datavalue,omitempty"`
-}
-
-type A_MainsnaksItem struct {
-	A_Snaktype  string          `json:"snaktype,omitempty"`
-	A_Property  string          `json:"property,omitempty"`
-	A_Datatype  string          `json:"datatype,omitempty"`
-	A_Datavalue A_DatavalueItem `json:"datavalue,omitempty"`
-}
-
-type A_MainsnaksString struct {
-	A_Snaktype  string            `json:"snaktype,omitempty"`
-	A_Property  string            `json:"property,omitempty"`
-	A_Datatype  string            `json:"datatype,omitempty"`
-	A_Datavalue A_DatavalueString `json:"datavalue,omitempty"`
-}
-
-type A_DatavalueTime struct {
-	A_Value A_ValueTime `json:"value,omitempty"`
-	A_Type  string      `json:"type,omitempty"`
-}
-
-type A_DatavalueItem struct {
-	A_Value A_ValueItem `json:"value,omitempty"`
-	A_Type  string      `json:"type,omitempty"`
-}
-
-type A_DatavalueString struct {
-	A_Value string `json:"value,omitempty"`
-	A_Type  string `json:"type,omitempty"`
-}
-
-type A_ValueTime struct {
-	A_Time          string `json:"time,omitempty"`
-	A_Timezone      int    `json:"timezone"`
-	A_Before        int    `json:"before"`
-	A_After         int    `json:"after"`
-	A_Precision     int    `json:"precision,omitempty"`
-	A_CalendarModel string `json:"calendarmodel,omitempty"`
-}
-
-type A_ValueItem struct {
-	A_EntityType string `json:"entity-type,omitempty"`
-	A_ID         string `json:"id,omitempty"`
-	A_NumericID  int    `json:"numeric-id,omitempty"`
-}
-
-type A_References struct {
-	A_Snaks      A_Snaks  `json:"snaks,omitempty"`
-	A_SnaksOrder []string `json:"snaks-order,omitempty"`
-}
-
-type A_Snaks struct {
-	A_P3 []A_PRefItem   `json:"P3,omitempty"` // Item type
-	A_P4 []A_PRefString `json:"P8,omitempty"` // String type
-	A_P7 []A_PRefTime   `json:"P7,omitempty"` // Time type
-}
-
-type A_PRefString struct {
-	A_Snaktype  string               `json:"snaktype,omitempty"`
-	A_Property  string               `json:"property,omitempty"`
-	A_Datatype  string               `json:"datatype,omitempty"`
-	A_Datavalue A_DatavalueRefString `json:"datavalue,omitempty"`
-}
-
-type A_PRefItem struct {
-	A_Snaktype  string             `json:"snaktype,omitempty"`
-	A_Property  string             `json:"property,omitempty"`
-	A_Datatype  string             `json:"datatype,omitempty"`
-	A_Datavalue A_DatavalueRefItem `json:"datavalue,omitempty"`
-}
-
-type A_PRefTime struct {
-	A_Snaktype  string             `json:"snaktype,omitempty"`
-	A_Property  string             `json:"property,omitempty"`
-	A_Datatype  string             `json:"datatype,omitempty"`
-	A_Datavalue A_DatavalueRefTime `json:"datavalue,omitempty"`
-}
-
-type A_DatavalueRefItem struct {
-	A_Value A_ValueRefItem `json:"value,omitempty"`
-	A_Type  string         `json:"type,omitempty"`
-}
-
-type A_DatavalueRefString struct {
-	A_Value string `json:"value,omitempty"`
-	A_Type  string `json:"type,omitempty"`
-}
-
-type A_ValueRefItem struct {
-	A_EntityType string `json:"entity-type,omitempty"`
-	A_Item       string `json:"item,omitempty"`
-	A_NumericId  int    `json:"numeric-id,omitempty"`
-}
-
-type A_DatavalueRefTime struct {
-	A_Value A_ValueRefTime `json:"value,omitempty"`
-	A_Type  string         `json:"type,omitempty"`
-}
-
-type A_ValueRefTime struct {
-	A_Time          string `json:"time,omitempty"`
-	A_Timezone      int    `json:"timezone"`
-	A_Before        int    `json:"before"`
-	A_After         int    `json:"after"`
-	A_Precision     int    `json:"precision,omitempty"`
-	A_CalendarModel string `json:"calendarmodel,omitempty"`
+	P5 []PItem   `json:"P5,omitempty"` // Entity type
+	P8 []PItem   `json:"P8,omitempty"` // Entity type
+	P1 []*PTime  `json:"P1,omitempty"` // Time type
+	P2 []*PTime  `json:"P2,omitempty"` // Time type
+	P6 []PString `json:"P6,omitempty"` // Entity type
 }
 
 type A_Aliases struct {
@@ -276,7 +142,7 @@ func ExportToWiki(client http.Client, tokenCsfr string, authorWikiArray []string
 	var (
 		id_library, name, birth_date_library, death_date_library, nationality, occupations_library, field, retrieved_date string
 		entity                                                                                                            A_Entity
-		replacer                                                                                                          = strings.NewReplacer("\\", "", "\"[", "[", "]\"", "]")
+		replacerWiki                                                                                                      = strings.NewReplacer("\\", "", "\"[", "[", "]\"", "]")
 	)
 
 	for x := 0; x < len(authorWikiArray); x += 9 {
@@ -323,312 +189,20 @@ func ExportToWiki(client http.Client, tokenCsfr string, authorWikiArray []string
 			}
 
 			// export the property: "instance of" is entity: "human"
-			entity.A_Claim.A_P5 = append(entity.A_Claim.A_P5,
-				A_PItem{
-					A_MainsnaksItem{
-						"value",
-						"P5",
-						"wikibase-item",
-						A_DatavalueItem{
-							A_ValueItem{
-								"item",
-								"Q1",
-								1,
-							},
-							"wikibase-entityid",
-						},
-					},
-					"statement",
-					"normal",
-					[]A_References{
-						A_References{
-							A_Snaks{
-								[]A_PRefItem{
-									A_PRefItem{
-										"value",
-										"P3",
-										"wikibase-item",
-										A_DatavalueRefItem{
-											A_ValueRefItem{
-												"item",
-												"Q2",
-												2,
-											},
-											"wikibase-entityid",
-										},
-									},
-								},
-								[]A_PRefString{
-									A_PRefString{
-										"value",
-										"P4",
-										"url",
-										A_DatavalueRefString{
-											"http://urn.bn.pt/nca/unimarc-authorities/marcxchange?id=" + id_library,
-											"string",
-										},
-									},
-								},
-								[]A_PRefTime{
-									A_PRefTime{
-										"value",
-										"P7",
-										"time",
-										A_DatavalueRefTime{
-											A_ValueRefTime{
-												retrieved_date,
-												0,
-												0,
-												0,
-												11,
-												"http://www.wikidata.org/entity/Q1985727",
-											},
-											"time",
-										},
-									},
-								},
-							},
-							[]string{
-
-								"P3", "P4", "P7",
-							},
-						},
-					},
-				},
-			)
+			entity.A_Claim.P5 = append(entity.A_Claim.P5, ReturnItemProperty("P5", 1, retrieved_date, id_library))
 
 			// if library author record has any information about its birth date, export it
 			if len(birth_date_library) > 0 {
-				entity.A_Claim.A_P1 = append(entity.A_Claim.A_P1,
-					A_PTime{
-						A_MainsnaksTime{
-							"value",
-							"P1",
-							"time",
-							A_DatavalueTime{
-								A_ValueTime{
-									"+" + birth_date_library + "-00-00T00:00:00Z",
-									0,
-									0,
-									0,
-									9,
-									"http://www.wikidata.org/entity/Q1985727",
-								},
-								"time",
-							},
-						},
-						"statement",
-						"normal",
-						[]A_References{
-							A_References{
-								A_Snaks{
-									[]A_PRefItem{
-										A_PRefItem{
-											"value",
-											"P3",
-											"wikibase-item",
-											A_DatavalueRefItem{
-												A_ValueRefItem{
-													"item",
-													"Q2",
-													2,
-												},
-												"wikibase-entityid",
-											},
-										},
-									},
-									[]A_PRefString{
-										A_PRefString{
-											"value",
-											"P4",
-											"url",
-											A_DatavalueRefString{
-												"http://urn.bn.pt/nca/unimarc-authorities/marcxchange?id=" + id_library,
-												"string",
-											},
-										},
-									},
-									[]A_PRefTime{
-										A_PRefTime{
-											"value",
-											"P7",
-											"time",
-											A_DatavalueRefTime{
-												A_ValueRefTime{
-													retrieved_date,
-													0,
-													0,
-													0,
-													11,
-													"http://www.wikidata.org/entity/Q1985727",
-												},
-												"time",
-											},
-										},
-									},
-								},
-								[]string{
-
-									"P3", "P4", "P7",
-								},
-							},
-						},
-					},
-				)
+				entity.A_Claim.P1 = append(entity.A_Claim.P1, ReturnTimeProperty("P1", birth_date_library, retrieved_date, id_library))
 			}
-
 			// if library author record has any information about its death date, export it
 			if len(death_date_library) > 0 {
-				entity.A_Claim.A_P2 = append(entity.A_Claim.A_P2,
-					A_PTime{
-						A_MainsnaksTime{
-							"value",
-							"P2",
-							"time",
-							A_DatavalueTime{
-								A_ValueTime{
-									"+" + death_date_library + "-00-00T00:00:00Z",
-									0,
-									0,
-									0,
-									9,
-									"http://www.wikidata.org/entity/Q1985727",
-								},
-								"time",
-							},
-						},
-						"statement",
-						"normal",
-						[]A_References{
-							A_References{
-								A_Snaks{
-									[]A_PRefItem{
-										A_PRefItem{
-											"value",
-											"P3",
-											"wikibase-item",
-											A_DatavalueRefItem{
-												A_ValueRefItem{
-													"item",
-													"Q2",
-													2,
-												},
-												"wikibase-entityid",
-											},
-										},
-									},
-									[]A_PRefString{
-										A_PRefString{
-											"value",
-											"P4",
-											"url",
-											A_DatavalueRefString{
-												"http://urn.bn.pt/nca/unimarc-authorities/marcxchange?id=" + id_library,
-												"string",
-											},
-										},
-									},
-									[]A_PRefTime{
-										A_PRefTime{
-											"value",
-											"P7",
-											"time",
-											A_DatavalueRefTime{
-												A_ValueRefTime{
-													retrieved_date,
-													0,
-													0,
-													0,
-													11,
-													"http://www.wikidata.org/entity/Q1985727",
-												},
-												"time",
-											},
-										},
-									},
-								},
-								[]string{
-
-									"P3", "P4", "P7",
-								},
-							},
-						},
-					},
-				)
+				entity.A_Claim.P2 = append(entity.A_Claim.P1, ReturnTimeProperty("P2", death_date_library, retrieved_date, id_library))
 			}
 
 			// NOT WORKING YET - should export to the author's page identifiers section
 			// but it is exporting to the declarations section
-			entity.A_Claim.A_P6 = append(entity.A_Claim.A_P6,
-				A_PString{
-					A_MainsnaksString{
-						"value",
-						"P6",
-						"external-id",
-						A_DatavalueString{
-							"http://urn.bn.pt/nca/unimarc-authorities/marcxchange?id=" + id_library,
-							"string",
-						},
-					},
-
-					"statement",
-					"normal",
-					[]A_References{
-						A_References{
-							A_Snaks{
-								[]A_PRefItem{
-									A_PRefItem{
-										"value",
-										"P3",
-										"wikibase-item",
-										A_DatavalueRefItem{
-											A_ValueRefItem{
-												"item",
-												"Q2",
-												2,
-											},
-											"wikibase-entityid",
-										},
-									},
-								},
-								[]A_PRefString{
-									A_PRefString{
-										"value",
-										"P4",
-										"url",
-										A_DatavalueRefString{
-											"http://urn.bn.pt/nca/unimarc-authorities/marcxchange?id=" + id_library,
-											"string",
-										},
-									},
-								},
-								[]A_PRefTime{
-									A_PRefTime{
-										"value",
-										"P7",
-										"time",
-										A_DatavalueRefTime{
-											A_ValueRefTime{
-												retrieved_date,
-												0,
-												0,
-												0,
-												11,
-												"http://www.wikidata.org/entity/Q1985727",
-											},
-											"time",
-										},
-									},
-								},
-							},
-							[]string{
-
-								"P3", "P4", "P7",
-							},
-						},
-					},
-				},
-			)
+			entity.A_Claim.P6 = append(entity.A_Claim.P6, ReturnStringProperty("P6", retrieved_date, id_library))
 
 		}
 
@@ -649,7 +223,7 @@ func ExportToWiki(client http.Client, tokenCsfr string, authorWikiArray []string
 	exportToWikidata := (string(t))
 
 	// convert the result from []byte to a string
-	exportToWikidata = replacer.Replace(exportToWikidata)
+	exportToWikidata = replacerWiki.Replace(exportToWikidata)
 
 	// Post the data to Wikidata
 	resp, err := client.PostForm("http://127.0.0.1:8181/api.php?", url.Values{
