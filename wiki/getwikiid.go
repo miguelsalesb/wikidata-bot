@@ -51,36 +51,68 @@ type mattype struct {
 func GetAuthorIDWiki(authorName string) string {
 	// time.Sleep(300 * time.Millisecond)
 
-	var idWiki string
+	var idWiki, idWikiPT, idWikiEN string
 
-	url := `https://query.wikidata.org/sparql?format=json&query=SELECT%20DISTINCT%20?item%20WHERE%20{?item%20wdt:P31%20wd:Q5.%20?item%20?label%20"` + authorName + `"@pt%20FILTER(BOUND(?item)).%20SERVICE%20wikibase:label%20{bd:serviceParam%20wikibase:language%20%22pt%22.}}`
+	urlPT := `https://query.wikidata.org/sparql?format=json&query=SELECT%20DISTINCT%20?item%20WHERE%20{?item%20wdt:P31%20wd:Q5.%20?item%20?label%20"` + authorName + `"@pt%20FILTER(BOUND(?item)).%20SERVICE%20wikibase:label%20{bd:serviceParam%20wikibase:language%20%22pt%22.}}`
 
-	res, err := http.Get(url)
+	resPT, errPT := http.Get(urlPT)
 
-	if err != nil {
+	if errPT != nil {
 		// panic(err.Error())
-		fmt.Println(err)
+		fmt.Println(errPT)
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
+	bodyPT, errBPT := ioutil.ReadAll(resPT.Body)
 
-	if err != nil {
+	if errBPT != nil {
 		// panic(err.Error())
-		fmt.Println(err)
+		fmt.Println(errBPT)
 	}
-	defer res.Body.Close()
+	defer resPT.Body.Close()
 
-	data := object{}
-	errI := json.Unmarshal(body, &data)
-	if errI != nil {
-		fmt.Println(errI)
+	dataPT := object{}
+	errIPT := json.Unmarshal(bodyPT, &dataPT)
+	if errIPT != nil {
+		fmt.Println(errIPT)
 	}
 
-	for _, p := range data.Results.Bindings {
+	urlEN := `https://query.wikidata.org/sparql?format=json&query=SELECT%20DISTINCT%20?item%20WHERE%20{?item%20wdt:P31%20wd:Q5.%20?item%20?label%20"` + authorName + `"@en%20FILTER(BOUND(?item)).%20SERVICE%20wikibase:label%20{bd:serviceParam%20wikibase:language%20%22en%22.}}`
 
+	resEN, errEN := http.Get(urlEN)
+
+	if errEN != nil {
+		// panic(err.Error())
+		fmt.Println(errEN)
+	}
+
+	bodyEN, errBEN := ioutil.ReadAll(resEN.Body)
+
+	if errBEN != nil {
+		// panic(err.Error())
+		fmt.Println(errBEN)
+	}
+	defer resPT.Body.Close()
+
+	dataEN := object{}
+	errIEN := json.Unmarshal(bodyEN, &dataEN)
+	if errIEN != nil {
+		fmt.Println(errIEN)
+	}
+
+	for _, p := range dataPT.Results.Bindings {
 		q := fmt.Sprintf("%v", p.Item.Value)
-		idWiki = q[strings.LastIndex(q, "/")+1:]
+		idWikiPT = q[strings.LastIndex(q, "/")+1:]
 	}
 
+	for _, p := range dataEN.Results.Bindings {
+		q := fmt.Sprintf("%v", p.Item.Value)
+		idWikiEN = q[strings.LastIndex(q, "/")+1:]
+	}
+
+	if len(idWikiPT) > 0 {
+		idWiki = idWikiPT
+	} else if len(idWikiEN) > 0 {
+		idWiki = idWikiEN
+	}
 	return idWiki
 }
