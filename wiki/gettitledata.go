@@ -60,11 +60,11 @@ func GetWikiTitleID(titleLowercase string, authors []string, language string) Wi
 	idW, wMat, idWiki, wMaterial = "", "", "", ""
 	const empty = ""
 
-	ti = replacer.Replace(titleLowercase)
+	ti = Replacer.Replace(titleLowercase)
 
 	if titleLowercase != "" {
 		if len(authors) > 0 {
-			aut = replacer.Replace(authors[1])
+			aut = Replacer.Replace(authors[1])
 
 			url = `https://query.wikidata.org/sparql?format=json&query=SELECT%20?item%20?itemLabel%20?author%20?authorLabel%20{SERVICE%20wikibase:mwapi%20{bd:serviceParam%20wikibase:api%20%22EntitySearch%22.bd:serviceParam%20wikibase:endpoint%20%22www.wikidata.org%22.bd:serviceParam%20mwapi:search%20%22` + ti + `%22.bd:serviceParam%20mwapi:language%20%22en%22.?item%20wikibase:apiOutputItem%20mwapi:item.?num%20wikibase:apiOrdinal%20true.}?item%20?label%20?title;(wdt:P31)%20?mattype;(wdt:P50)%20?author.?author%20?label%20%22` + aut + `%22@` + language + `.SERVICE%20wikibase:label%20{bd:serviceParam%20wikibase:language%20%22` + language + `%22.}}ORDER%20BY%20?num%20LIMIT%201`
 

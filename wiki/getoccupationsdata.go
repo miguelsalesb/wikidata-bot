@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"wikidata/db"
 )
 
 // Structs to get the author's Wikidata ID
@@ -61,11 +62,12 @@ func GetOccupationsWiki(nonCoincidentalOccupations []string) ([]string, []string
 		if nonCoincidentalOccupations[x] != "" {
 			// time.Sleep(300 * time.Millisecond)
 			noCoincOccup := strings.TrimLeft(nonCoincidentalOccupations[x], " ")
-			nonCoincOccup := replacer.Replace(noCoincOccup)
+			nonCoincOccup := Replacer.Replace(noCoincOccup)
+
+			numberofCharacters := db.ReplacerDB.Replace((nonCoincOccup))
 
 			// Just search the words that have more than 3 letters
-			if len(nonCoincOccup) > 3 {
-
+			if len(numberofCharacters) > 3 {
 				// Search for the occupation (in portuguese) and that has P31 (instance of) with: Q28640 (profession), Q4164871 (position) or Q12737077 (occupation)
 
 				url := `https://query.wikidata.org/sparql?format=json&query=SELECT%20?item%20?instanceOf%20?instanceOfLabel%20WHERE%20{SERVICE%20wikibase:mwapi%20{bd:serviceParam%20wikibase:endpoint%20%22www.wikidata.org%22;wikibase:api%20%22EntitySearch%22;mwapi:search%20"` + strings.TrimLeft(nonCoincOccup, " ") + `";mwapi:language%20%22pt%22.?item%20wikibase:apiOutputItem%20mwapi:item.?num%20wikibase:apiOrdinal%20true.}?item%20(wdt:P31)%20?instanceOf.SERVICE%20wikibase:label%20{%20bd:serviceParam%20wikibase:language%20%22pt%22.%20}}%20ORDER%20BY%20ASC(?num)%20LIMIT%201`

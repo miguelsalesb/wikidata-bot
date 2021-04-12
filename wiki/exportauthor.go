@@ -8,10 +8,12 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"wikidata/db"
 	"wikidata/functions"
+	"wikidata/logs"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -143,7 +145,17 @@ func ExportToWiki(client http.Client, tokenCsfr string, authorWikiArray []string
 		id_library, name, birth_date_library, death_date_library, nationality, occupations_library, field, retrieved_date string
 		entity                                                                                                            A_Entity
 		replacerWiki                                                                                                      = strings.NewReplacer("\\", "", "\"[", "[", "]\"", "]")
+		errLog                                                                                                            error
 	)
+
+	logs.File, errLog = os.OpenFile("bnp.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if errLog != nil {
+		log.Println("LOG FILE ERROR: ", errLog)
+	}
+	defer logs.File.Close()
+
+	log.SetOutput(logs.File)
+	log.Println(authorWikiArray[0])
 
 	for x := 0; x < len(authorWikiArray); x += 9 {
 		id_library = authorWikiArray[x]

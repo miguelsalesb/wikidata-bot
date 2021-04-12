@@ -76,15 +76,9 @@ func GetWikiContent(authors []string) ([]string, []string) {
 	var counter200, counter400 = 0, 0
 
 	for x := 0; x < len(authors); x += 6 {
-		replacer := strings.NewReplacer(" ", "%20", "À", "%C3%80", "Á", "%C3%81", "Â", "%C3%82", "Ã", "%C3%83", "Ä", "%C3%84", "Ç", "%C3%87", "È", "%C3%88",
-			"É", "%C3%89", "Ê", "%C3%8A", "Ë", "%C3%8B", "Ì", "%C3%8C", "Í", "%C3%8D", "Î", "%C3%8E", "Ï", "%C3%8F", "Ò", "%C3%92", "Ó", "%C3%93", "Ô", "%C3%94",
-			"Õ", "%C3%95", "Ö", "%C3%96", "Ù", "%C3%99", "Ó", "%C3%9A", "Û", "%C3%9B", "Ý", "%C3%9D", "à", "%C3%A0", "á", "%C3%A1", "â", "%C3%A2", "ã", "%C3%A3",
-			"ä", "%C3%A4", "ç", "%C3%A7", "è", "%C3%A8", "é", "%C3%A9", "ê", "%C3%AA", "ë", "%C3%AB", "ì", "%C3%AC", "í", "%C3%AD", "î", "%C3%AE", "ï", "C3%AF",
-			"ñ", "%C3%B1", "ò", "%C3%B2", "ó", "%C3%B3", "ô", "%C3%B4", "õ", "%C3%B5", "ö", "%C3%B6", "ù", "%C3%B9", "ú", "%C3%BA", "û", "%C3%BB", "ü", "%C3%BC",
-			"ý", "%C3%BD", "\"", "'", "º", "%C2%BA", "ª", "%C2%AA", "&", "%26", ",", "%2C", "!", "%21", "#", "%23", "$", "%24", "%", "%25", "'", "%27", "(", "%28",
-			")", "%29", "-", "%2D", "[", "%5B", "]", "%5D", "^", "%5E", "_", "%5F", "_", "%60", "{", "%7B", "{", "%7C", "}", "%7D")
-		name2 = replacer.Replace(authors[x+2])
-		name1 = replacer.Replace(authors[x+1])
+
+		name2 = Replacer.Replace(authors[x+2])
+		name1 = Replacer.Replace(authors[x+1])
 
 		// get the author's Wikidata ID
 		var idWiki = GetAuthorIDWiki(name2 + "%20" + name1)
@@ -143,9 +137,7 @@ func GetWikiContent(authors []string) ([]string, []string) {
 					// get the author's signature image
 					if v.Prop.Value == "http://www.wikidata.org/entity/P109" {
 						sig := fmt.Sprintf("%v", v.ValLabel.Value)
-
 						signature = sig
-						// fmt.Println("\n\n\nsignature", signature)
 					}
 					// get the author's image
 					if v.Prop.Value == "http://www.wikidata.org/entity/P18" {

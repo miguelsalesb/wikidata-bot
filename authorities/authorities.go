@@ -43,7 +43,6 @@ func GetAuthors(doneAuthorities chan bool, repAuthorsFirst string, repAuthorsLas
 		names, dates               []string
 		nationality, occupations   string
 		wikiresults1, wikiresults2 []string // auhor info: id's dates, nationality, occupations,
-
 	)
 
 	repAuthorFirst, _ := strconv.Atoi(repAuthorsFirst)
@@ -52,7 +51,7 @@ func GetAuthors(doneAuthorities chan bool, repAuthorsFirst string, repAuthorsLas
 	// Get data from the author's repository
 	for n := repAuthorFirst; n <= repAuthorLast; n++ {
 		fmt.Println("\nAuthorities - ", n)
-		time.Sleep(450 * time.Millisecond)
+		time.Sleep(150 * time.Millisecond)
 		// if n%500 == 0 {
 		// 	time.Sleep(60 * time.Second)
 		// }
@@ -555,8 +554,8 @@ func WriteAuthors(author Authors, dbs *sql.DB) {
 		t := time.Now()
 		year := t.Year()
 
-		libraryDeathDate, err := strconv.Atoi(deathDateLibrary)
-		wikidataDeathDate, err := strconv.Atoi(deathDateWikidata)
+		libraryDeathDate, _ := strconv.Atoi(deathDateLibrary)
+		wikidataDeathDate, _ := strconv.Atoi(deathDateWikidata)
 
 		if year-libraryDeathDate > 70 {
 			libraryAuthorPublicDomain = "true"
@@ -587,14 +586,13 @@ func WriteAuthors(author Authors, dbs *sql.DB) {
 
 			nonCoincidOccupWithoutInstanceOf := strings.Join(nonCoinOccupWithoutInstanceOf, ",")
 			nonCoincidentaldOccupWithoutInstanceOf := strings.Trim(nonCoincidOccupWithoutInstanceOf, ",")
-			nonCoincidentalOccupationsWithoutInstanceOf = db.ReplacerDB.Replace(nonCoincidentaldOccupWithoutInstanceOf)
+			nonCoincidentalOccupationsWithoutInstanceOf = nonCoincidentaldOccupWithoutInstanceOf
 		} else {
 			nonCoinOccup, nonCoinOccupWithoutInstanceOf = nil, nil
 		}
-
 		// Take away the multiples commas
 		// replacerNonCoincidental := strings.NewReplacer(",,", "")
-		nonCoincidentalOccupationsWithoutInstanceOf = db.ReplacerDB.Replace(nonCoincidentalOccupationsWithoutInstanceOf)
+		// nonCoincidentalOccupationsWithoutInstanceOf = nonCoincidentalOccupationsWithoutInstanceOf
 
 		// Calculation of the probability of the author already existing in Wikidata
 
@@ -650,8 +648,14 @@ func WriteAuthors(author Authors, dbs *sql.DB) {
 
 		authorWikiArray = append(authorWikiArray, idLibrary, surname+" "+name, birthDateLibrary, deathDateLibrary, nationalityWikidata, occupationsLibrary, field, retrieved_date, existsInWikiFinal)
 
+		/* ********************
+		for Portuguese authors only
+		If you want to write other nationality authors, remove the following comment
+
+		******************** */
+		// if nationalityLibrary == "PT" {
 		// write the author data in the authors table
-		stmt, err := dbs.Exec("INSERT INTO " + dbName + " (id_library, id_library_wikidata, id_wikidata, name, surname, initials, author_description_wikidata, birth_date_library, death_date_library, birth_date_wikidata, death_date_wikidata, nationality_library, nationality_wikidata, ref, field, occupations_library, occupations_wikidata, same_occupations, coincidental_occupations, non_coincidental_occupations, notablework_wikidata, same_as_field200, exists_in_wiki, same_birthdate, same_deathdate, same_nationality, library_author_public_domain, wikidata_author_public_domain, signature, image, retrieved_date) VALUES (" + idLibrary + " , '" + idLibraryWikidata + "','" + idWikidata + "', '" + name + "', '" + surname + "', '" + initials + "', '" + authorDescriptionWikidata + "', '" + birthDateLibrary + "', '" + deathDateLibrary + "', '" + birthDateWikidata + "', '" + deathDateWikidata + "', '" + nationalityLibrary + "', '" + nationalityWikidata + "', '" + ref + "', '" + field + "', '" + occupationsLibrary + "', '" + occupationsWikidata + "', '" + sameOccupations + "', '" + coincidentalOccupations + "', '" + nonCoincidentalOccupationsWithoutInstanceOf + "', '" + notableworkWikidata + "', '" + sameAsField200 + "', '" + existsInWikiFinal + "', '" + sameBirthdate + "', '" + sameDeathdate + "', '" + sameNationality + "', '" + libraryAuthorPublicDomain + "', '" + wikidataAuthorPublicDomain + "', '" + signature + "', '" + image + "', '" + retrieved_date + "')")
+		stmt, err := dbs.Exec("INSERT INTO " + dbName + " (id_library, id_library_wikidata, id_wikidata, name, surname, initials, author_description_wikidata, birth_date_library, death_date_library, birth_date_wikidata, death_date_wikidata, nationality_library, nationality_wikidata, ref, field, occupations_library, occupations_wikidata, same_occupations, coincidental_occupations, non_coincidental_occupations, notablework_wikidata, same_as_field200, exists_in_wiki, same_birthdate, same_deathdate, same_nationality, library_author_public_domain, wikidata_author_public_domain, signature, image, retrieved_date) VALUES (" + idLibrary + " , '" + idLibraryWikidata + "','" + idWikidata + "', '" + name + "', '" + surname + "', '" + initials + "', '" + authorDescriptionWikidata + "', '" + birthDateLibrary + "', '" + deathDateLibrary + "', '" + birthDateWikidata + "', '" + deathDateWikidata + "', '" + nationalityLibrary + "', '" + nationalityWikidata + "', '" + ref + "', '" + field + "', '" + occupationsLibrary + "', '" + occupationsWikidata + "', '" + sameOccupations + "', '" + coincidentalOccupations + "', '" + db.ReplacerDB.Replace(nonCoincidentalOccupationsWithoutInstanceOf) + "', '" + notableworkWikidata + "', '" + sameAsField200 + "', '" + existsInWikiFinal + "', '" + sameBirthdate + "', '" + sameDeathdate + "', '" + sameNationality + "', '" + libraryAuthorPublicDomain + "', '" + wikidataAuthorPublicDomain + "', '" + signature + "', '" + image + "', '" + retrieved_date + "')")
 		check(err)
 
 		n, err := stmt.RowsAffected()
@@ -661,15 +665,20 @@ func WriteAuthors(author Authors, dbs *sql.DB) {
 			// Stop the script when no more lines are written in the database
 			os.Exit(0)
 		}
+		// }
 
 	}
 
-	// just export the portuguese authors
+	/*********************
+	just export the portuguese authors
+	If you want to export to Wikidata other nationality authors, remove the following condition
+
+	******************** */
 	if nationalityLibrary == "PT" {
 		wiki.ExportAuthor(authorWikiArray)
 	}
 
-	if len(nonCOccup) > 1 && nonCOccup[0] != "" {
+	if len(nonCOccup) > 1 && len(nonCOccup[0]) > 0 {
 		// The occupation and its label, and the occupation instanceOf and its label (Wikidata info)
 		nonCoincidOccup := strings.Join(nonCoinOccup, ",")
 		nonCoincidentalOccupations = replacer.Replace(nonCoincidOccup)

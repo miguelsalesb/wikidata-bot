@@ -14,11 +14,14 @@ var (
 	DBCon *sql.DB
 )
 
-var ReplacerDB = strings.NewReplacer("%2C", ",", ",,", "", "%C3%80", "À", "%C3%81", "Á", "%C3%82", "Â", "%C3%83", "Ã", "%C3%84", "Ä", "%C3%87", "Ç", "%C3%88", "È",
-	"%C3%89", "É", "%C3%8A", "Ê", "%C3%8B", "Ë", "%C3%8C", "Ì", "%C3%8D", "Í", "%C3%8E", "Î", "%C3%8F", "Ï", "%C3%92", "Ò", "%C3%93", "Ó", "%C3%94", "Ô",
-	"%C3%95", "Õ", "%C3%96", "Ö", "%C3%99", "Ù", "%C3%9A", "Ó", "%C3%9B", "Û", "%C3%9D", "Ý", "%C3%A0", "à", "%C3%A1", "á", "%C3%A2", "â", "%C3%A3", "ã", "ä", "%C3%A4", "ç", "%C3%A7", "è", "%C3%A8", "é", "%C3%A9", "ê", "%C3%AA", "ë", "%C3%AB", "ì", "%C3%AC", "í", "%C3%AD", "î", "%C3%AE", "ï", "C3%AF",
-	"%C3%B1", "ñ", "%C3%B2", "ò", "%C3%B3", "ó", "%C3%B4", "ô", "%C3%B5", "õ", "%C3%B6", "ö", "%C3%B9", "ù", "%C3%BA", "ú", "%C3%BB", "û", "%C3%BC", "ü", "ý", "%C3%BD", "\"", "'", "º", "%C2%BA", "ª", "%C2%AA", "&", "%26", ",", "%2C", "!", "%21", "#", "%23", "$", "%24", "%", "%25", "'", "%27", "(", "%28",
-	"%29", ")", "%2D", "-", "%5B", "[", "%5D", "]", "%5E", "^", "%5F", "_", "%60", "_", "%7B", "{", "%7C", "{", "%7D", "}", "none,", "")
+var ReplacerDB = strings.NewReplacer("%20", " ", "%2C", ",", "%C3%80", "À", "%C3%81", "Á", "%C3%82", "Â", "%C3%83", "Ã", "%C3%84", "Ä",
+	"%C3%87", "Ç", "%C3%88", "È", "%C3%89", "É", "%C3%8A", "Ê", "%C3%8B", "Ë", "%C3%8C", "Ì", "%C3%8D", "Í", "%C3%8E", "Î", "%C3%8F", "Ï",
+	"%C3%92", "Ò", "%C3%93", "Ó", "%C3%94", "Ô", "%C3%95", "Õ", "%C3%96", "Ö", "%C3%99", "Ù", "%C3%9A", "Ó", "%C3%9B", "Û", "%C3%9D", "Ý",
+	"%C3%A0", "à", "%C3%A1", "á", "%C3%A2", "â", "%C3%A3", "ã", "%C3%A4", "ä", "%C3%A7", "ç", "%C3%A8", "è", "%C3%A9", "é", "%C3%AA", "ê",
+	"%C3%AB", "ë", "%C3%AC", "ì", "%C3%AD", "í", "%C3%AE", "î", "C3%AF", "ï", "%C3%B1", "ñ", "%C3%B2", "ò", "%C3%B3", "ó", "%C3%B4", "ô",
+	"%C3%B5", "õ", "%C3%B6", "ö", "%C3%B9", "ù", "%C3%BA", "ú", "%C3%BB", "û", "%C3%BC", "ü", "%C3%BD", "ý", "\"", "'", "%C2%BA", "º",
+	"%C2%AA", "ª", "%26", "&", "%23", "#", "%24", "$", "%25", "%", "\\%27", "", "%28", "(", "%29", ")", "%2D", "-", "%5B", "[", "%5D", "]",
+	"%5E", "^", "%5F", "_", "%60", "`", "%7B", "{", "%7C", "|", "%7D", "}", "none,", "", ",,", "")
 
 func check(e error) {
 	if e != nil {
@@ -33,16 +36,20 @@ func WriteOccupations(idLibrary string, nonCoinOccup []string) {
 
 	for o := 0; o < len(nonCoinOccup); o += 4 {
 
-		stmt, err := DBCon.Exec("INSERT INTO " + dbName + " (id_library, id_occupation, name_occupation, id_instance_of, name_instance_of) VALUES ('" + idLibrary + "' , '" + nonCoinOccup[o] + "', '" + nonCoinOccup[o+1] + "', '" + nonCoinOccup[o+2] + "', '" + nonCoinOccup[o+3] + "')")
-		check(err)
+		if len(nonCoinOccup[o]) > 0 {
 
-		n, err := stmt.RowsAffected()
-		check(err)
+			stmt, err := DBCon.Exec("INSERT INTO " + dbName + " (id_library, id_occupation, name_occupation, id_instance_of, name_instance_of) VALUES ('" + idLibrary + "' , '" + nonCoinOccup[o] + "', '" + ReplacerDB.Replace(nonCoinOccup[o+1]) + "', '" + nonCoinOccup[o+2] + "', '" + ReplacerDB.Replace(nonCoinOccup[o+3]) + "')")
+			check(err)
 
-		if n == 0 {
-			// Stop the script when no more lines are written in the database
-			os.Exit(0)
+			n, err := stmt.RowsAffected()
+			check(err)
+
+			if n == 0 {
+				// Stop the script when no more lines are written in the database
+				os.Exit(0)
+			}
 		}
+
 	}
 }
 
