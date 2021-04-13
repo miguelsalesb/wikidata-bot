@@ -126,8 +126,8 @@ func GetAuthorNames(urlMarcxchange string) []string {
 
 	const empty = ""
 	var (
-		id, name, surname, initials, ref string
-		replacer                         = strings.NewReplacer(",", "", "\\", "", "'", "\\'", "<", "", ">", "")
+		id, name200, surname200, initials200, name400, surname400, initials400, ref string
+		replacer                                                                    = strings.NewReplacer(",", "", "\\", "", "'", "\\'", "<", "", ">", "")
 	)
 	var authInfo = make([]string, 0, 6)
 	res, err := http.Get(urlMarcxchange)
@@ -163,33 +163,33 @@ func GetAuthorNames(urlMarcxchange string) []string {
 			s.Find("subfield").Each(func(i int, e *goquery.Selection) {
 				if attr, _ := e.Attr("code"); attr == "a" {
 					nm := e.Text()
-					name = replacer.Replace(nm)
+					name200 = replacer.Replace(nm)
 				}
 				if attr, _ := e.Attr("code"); attr == "b" {
 					sn := e.Text()
-					surname = replacer.Replace(sn)
+					surname200 = replacer.Replace(sn)
 				}
 				if attr, ok := e.Attr("code"); attr == "c" {
 					if ok {
 						in := e.Text()
-						initials = replacer.Replace(in)
+						initials200 = replacer.Replace(in)
 					}
 				}
 			})
-			if name == "" {
+			if name200 == "" {
 				authInfo = append(authInfo, empty)
 			} else {
-				authInfo = append(authInfo, name)
+				authInfo = append(authInfo, name200)
 			}
-			if surname == "" {
+			if surname200 == "" {
 				authInfo = append(authInfo, empty)
 			} else {
-				authInfo = append(authInfo, surname)
+				authInfo = append(authInfo, surname200)
 			}
-			if initials == "" {
+			if initials200 == "" {
 				authInfo = append(authInfo, empty)
 			} else {
-				authInfo = append(authInfo, initials)
+				authInfo = append(authInfo, initials200)
 			}
 			authInfo = append(authInfo, empty)
 			authInfo = append(authInfo, "200")
@@ -208,16 +208,16 @@ func GetAuthorNames(urlMarcxchange string) []string {
 			s.Find("subfield").Each(func(i int, e *goquery.Selection) {
 				if attr, _ := e.Attr("code"); attr == "a" {
 					nm := e.Text()
-					name = replacer.Replace(nm)
+					name400 = replacer.Replace(nm)
 				}
 				if attr, _ := e.Attr("code"); attr == "b" {
 					sn := e.Text()
-					surname = replacer.Replace(sn)
+					surname400 = replacer.Replace(sn)
 				}
 				if attr, ok := e.Attr("code"); attr == "c" {
 					if ok {
 						in := e.Text()
-						initials = replacer.Replace(in)
+						initials400 = replacer.Replace(in)
 					}
 				}
 				if attr, ok := e.Attr("code"); attr == "3" {
@@ -227,20 +227,20 @@ func GetAuthorNames(urlMarcxchange string) []string {
 					}
 				}
 			})
-			if name == "" {
+			if name400 == "" {
 				authInfo = append(authInfo, empty)
 			} else {
-				authInfo = append(authInfo, name)
+				authInfo = append(authInfo, name400)
 			}
-			if surname == "" {
+			if surname400 == "" {
 				authInfo = append(authInfo, empty)
 			} else {
-				authInfo = append(authInfo, surname)
+				authInfo = append(authInfo, surname400)
 			}
-			if initials == "" {
+			if initials400 == "" {
 				authInfo = append(authInfo, empty)
 			} else {
-				authInfo = append(authInfo, initials)
+				authInfo = append(authInfo, initials400)
 			}
 			if ref == "" {
 				authInfo = append(authInfo, empty)
