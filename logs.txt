@@ -1,0 +1,10 @@
+2021/04/13 13:23:09 13-04-2021 - The title repository was scrapped from record: 40000 to record 
+2021/04/13 13:23:09 13-04-2021 - The title repository was scrapped from record:  to record 
+2021/04/14 13:34:26 14-04-2021 - The title repository was scrapped from record:  to record 
+2021/04/14 13:34:26 14-04-2021 - The title repository was scrapped from record:  to record 
+2021/04/14 13:37:40 14-04-2021 - The title repository was scrapped from record:  to record 
+2021/04/14 13:37:40 14-04-2021 - The title repository was scrapped from record:  to record 
+2021/04/14 17:20:21 14-04-2021 - The title repository was scrapped from record: 1 to record 200
+2021/04/14 17:20:21 14-04-2021 - The title repository was scrapped from record: 1 to record 400
+2021/04/14 17:56:55 14-04-2021 - The title repository was scrapped from record: 201 to record 300
+2021/04/14 17:56:55 14-04-2021 - The title repository was scrapped from record: 401 to record 600

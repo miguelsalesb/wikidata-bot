@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 	"wikidata/db"
@@ -93,14 +92,12 @@ func check(e error) {
 var dbName = "titles"
 var replacerTitle = strings.NewReplacer("<", "", ">", "", "'", "\\'", "«", "", "»", "", "º", "", "[", "", "]", "", "\"", "\\'")
 
-func GetTitles(doneTitles chan bool, repTitlesFirst string, repTitlesLast string) {
+func GetTitles(doneTitles chan bool, repTitlesFirst int, repTitlesLast int) {
 
 	var wkOriginalTitleID WikiData
 	const empty = ""
-	repTitleFirst, _ := strconv.Atoi(repTitlesFirst)
-	repTitleLast, _ := strconv.Atoi(repTitlesLast)
 
-	for n := repTitleFirst; n <= repTitleLast; n++ {
+	for n := repTitlesFirst; n <= repTitlesLast; n++ {
 		time.Sleep(500 * time.Millisecond)
 		if n%500 == 0 {
 			time.Sleep(120 * time.Second)
@@ -310,7 +307,7 @@ func WriteTitles(data Data, db *sql.DB) {
 	var (
 		authorWiki, idAuthor, author, field string
 	)
-	// const empty = ""
+	const empty = ""
 
 	idLibrary := data.LibraryData.id
 	languageOfWork := data.LibraryData.languageOfWork
@@ -355,12 +352,8 @@ func WriteTitles(data Data, db *sql.DB) {
 
 	if languageOfWork == "por" && len(titleIDWiki) == 0 && len(authorWiki) > 0 {
 
-		// if len(titleIDWiki) == 0 && len(authorWiki) > 0 {
-
 		wiki.ExportTitle(idLibrary, originalLanguageOfWork, title, originalTitle, authorWiki, pubDate, retrieved_date)
-
 	}
-
 }
 
 func GetWikiTitleID(titleLowercase string, authors []string, language string) WikiData {

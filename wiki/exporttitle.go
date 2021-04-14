@@ -179,9 +179,10 @@ func ExportTitle(idLibrary, originalLanguageOfWork, title, originalTitle, author
 	entity.T_Claim.P8 = append(entity.T_Claim.P8, ReturnItemProperty("P8", 3, retrieved_date, idLibrary))
 
 	// country of origin - Portugal - it only exports portuguese works
-	entity.T_Claim.P10 = append(entity.T_Claim.P8, ReturnItemProperty("P10", 4, retrieved_date, idLibrary))
+	entity.T_Claim.P10 = append(entity.T_Claim.P10, ReturnItemProperty("P10", 4, retrieved_date, idLibrary))
 
 	// if it has a publication data, export it to Wikidata
+
 	if len(pubDate) > 0 {
 		entity.T_Claim.P9 = append(entity.T_Claim.P9, ReturnTimeProperty("P9", pubDate, retrieved_date, idLibrary))
 	} else {
@@ -195,7 +196,8 @@ func ExportTitle(idLibrary, originalLanguageOfWork, title, originalTitle, author
 	exportTitleToWikidata := (string(t))
 
 	// replace some characters
-	replacerExport := strings.NewReplacer("\\", "", "\"[", "[", "]\"", "]", "\"{", "{", "}\"", "}")
+	replacerExport := strings.NewReplacer("\\", "", "\"[", "[", "]\"", "]")
+
 	exportTitleToWikidata = replacerExport.Replace(exportTitleToWikidata)
 
 	// Post the data to Wikidata

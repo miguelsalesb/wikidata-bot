@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 	"wikidata/authorities"
 	"wikidata/db"
 	"wikidata/logs"
 	"wikidata/titles"
+	"wikidata/wiki"
 )
 
 // This app gets the data of the Library authoritoes and bibliographic repositories
@@ -21,23 +23,48 @@ import (
 func main() {
 
 	var (
-		errLog, errDB, errPing                                         error
-		repTitlesFirst, repTitlesLast, repAuthorsFirst, repAuthorsLast string
+		errLog, errDB, errPing                                                   error
+		repTitlesFirst, repTitlesLast, repAuthorsFirst, repAuthorsLast, populate string
+		authorFirst, authorLast, titleFirst, titleLast                           int
 	)
 
 	var tables = []string{"authors", "titles", "occupations"}
 
+	fmt.Print("Do you want to populate Wikidata with some initial properties and entities (yes or no) \n ")
+	fmt.Scanln(&populate)
+
+	if populate != "yes" && populate != "no" {
+		fmt.Print("\nPlease type yes or no \n ")
+		fmt.Scanln(&populate)
+	}
+
 	fmt.Print("Insert the number from the authors repository where you want to start and then press Enter \n ")
 	fmt.Scanln(&repAuthorsFirst)
+	authorFirst, _ = strconv.Atoi(repAuthorsFirst)
 
 	fmt.Print("Insert the number from the authors repository where you want to finish and then press Enter \n ")
 	fmt.Scanln(&repAuthorsLast)
+	authorLast, _ = strconv.Atoi(repAuthorsLast)
+
+	if authorLast < authorFirst {
+		fmt.Print("\nThe finish number has to be greater than the starting number. Please insert the finish number and press Enter \n ")
+		fmt.Scanln(&repAuthorsLast)
+		authorLast, _ = strconv.Atoi(repAuthorsLast)
+	}
 
 	fmt.Print("Insert the number from the titles repository where you want to start and then press Enter \n ")
 	fmt.Scanln(&repTitlesFirst)
+	titleFirst, _ = strconv.Atoi(repTitlesFirst)
 
 	fmt.Print("Insert the number from the titles repository where you want to finish and then press Enter \n ")
 	fmt.Scanln(&repTitlesLast)
+	titleLast, _ = strconv.Atoi(repTitlesLast)
+
+	if repTitlesLast < repTitlesFirst {
+		fmt.Print("\nThe finish number has to be greater than the starting number. Please insert the finish number and press Enter \n ")
+		fmt.Scanln(&repTitlesLast)
+		titleLast, _ = strconv.Atoi(repTitlesLast)
+	}
 
 	// write the logs in the logs.txt file
 	logs.File, errLog = os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
@@ -75,6 +102,10 @@ func main() {
 		log.Println("DATABASE CONNECTION FAILED: ", errPing)
 	}
 
+	if populate == "yes" {
+		wiki.CreateFirst()
+	}
+
 	// check if the tables exist
 	//if not, create them
 	for _, v := range tables {
@@ -97,8 +128,8 @@ func main() {
 	doneAuthorities := make(chan bool)
 	doneTitles := make(chan bool)
 	// https://medium.com/@ishagirdhar/import-cycles-in-golang-b467f9f0c5a0
-	go authorities.GetAuthors(doneAuthorities, strings.Trim(repAuthorsFirst, " "), strings.Trim(repAuthorsLast, " "))
-	go titles.GetTitles(doneTitles, strings.Trim(repTitlesFirst, " "), strings.Trim(repTitlesLast, " "))
+	go authorities.GetAuthors(doneAuthorities, authorFirst, authorLast)
+	go titles.GetTitles(doneTitles, titleFirst, titleLast)
 
 	<-doneAuthorities
 	<-doneTitles
@@ -106,6 +137,6 @@ func main() {
 
 	t := time.Now().Format("02-01-2006")
 	log.SetOutput(logs.File)
-	log.Printf("%v - The title repository was scrapped from record: %v to record %v", t, repAuthorsFirst, repAuthorsLast)
-	log.Printf("%v - The title repository was scrapped from record: %v to record %v", t, repTitlesFirst, repTitlesLast)
+	log.Printf("%v - The title repository was scrapped from record: %v to record %v", t, strings.Trim(repAuthorsFirst, " "), strings.Trim(repAuthorsLast, " "))
+	log.Printf("%v - The title repository was scrapped from record: %v to record %v", t, strings.Trim(repTitlesFirst, " "), strings.Trim(repTitlesLast, " "))
 }

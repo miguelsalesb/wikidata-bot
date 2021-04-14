@@ -8,12 +8,10 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 	"wikidata/db"
 	"wikidata/functions"
-	"wikidata/logs"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -87,20 +85,8 @@ func ExportAuthor(authorWikiArray []string) {
 	var (
 		greaterThanOne       bool
 		exists_in_wiki_array []int
-		tokenCsfr            string
 		counter              int
 	)
-
-	options := cookiejar.Options{
-		PublicSuffixList: publicsuffix.List,
-	}
-	jar, err := cookiejar.New(&options)
-	if err != nil {
-		log.Fatal(err)
-	}
-	client := http.Client{Jar: jar}
-
-	tokenCsfr = ConnectToWikidata(client)
 
 	for x := 0; x < len(authorWikiArray); x += 9 {
 
@@ -126,11 +112,11 @@ func ExportAuthor(authorWikiArray []string) {
 	if greaterThanOne == false {
 		// If field 200 has zero probability of existing in Wikidata
 		if exists_in_wiki_array[0] == 0 {
-			ExportToWiki(client, tokenCsfr, authorWikiArray)
+			ExportToWiki(authorWikiArray)
 		} else if len(exists_in_wiki_array) > 0 {
 			for x := 1; x < len(exists_in_wiki_array); x++ {
 				if exists_in_wiki_array[x] == 0 {
-					ExportToWiki(client, tokenCsfr, authorWikiArray)
+					ExportToWiki(authorWikiArray)
 					break
 				}
 			}
@@ -139,23 +125,23 @@ func ExportAuthor(authorWikiArray []string) {
 
 }
 
-func ExportToWiki(client http.Client, tokenCsfr string, authorWikiArray []string) {
+func ExportToWiki(authorWikiArray []string) {
 	// time.Sleep(300 * time.Millisecond)
 	var (
-		id_library, name, birth_date_library, death_date_library, nationality, occupations_library, field, retrieved_date string
-		entity                                                                                                            A_Entity
-		replacerWiki                                                                                                      = strings.NewReplacer("\\", "", "\"[", "[", "]\"", "]")
-		errLog                                                                                                            error
+		id_library, name, birth_date_library, death_date_library, nationality, occupations_library, field, retrieved_date, tokenCsfr string
+		entity                                                                                                                       A_Entity
 	)
 
-	logs.File, errLog = os.OpenFile("bnp.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if errLog != nil {
-		log.Println("LOG FILE ERROR: ", errLog)
+	options := cookiejar.Options{
+		PublicSuffixList: publicsuffix.List,
 	}
-	defer logs.File.Close()
+	jar, err := cookiejar.New(&options)
+	if err != nil {
+		log.Fatal(err)
+	}
+	client := http.Client{Jar: jar}
 
-	log.SetOutput(logs.File)
-	log.Println(authorWikiArray[0])
+	tokenCsfr = ConnectToWikidata(client)
 
 	for x := 0; x < len(authorWikiArray); x += 9 {
 		id_library = authorWikiArray[x]
@@ -235,6 +221,7 @@ func ExportToWiki(client http.Client, tokenCsfr string, authorWikiArray []string
 	exportToWikidata := (string(t))
 
 	// convert the result from []byte to a string
+	var replacerWiki = strings.NewReplacer("\\", "", "\"[", "[", "]\"", "]")
 	exportToWikidata = replacerWiki.Replace(exportToWikidata)
 
 	// Post the data to Wikidata

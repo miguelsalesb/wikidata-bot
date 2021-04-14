@@ -47,67 +47,54 @@ type mattype struct {
 	Value string `json:"value"`
 }
 
+func GetData(authorName string, languageLabel string) string {
+
+	var idWiki string
+
+	url := `https://query.wikidata.org/sparql?format=json&query=SELECT%20DISTINCT%20?item%20WHERE%20{?item%20wdt:P31%20wd:Q5.%20?item%20?label%20"` + authorName + `"@` + languageLabel + `%20FILTER(BOUND(?item)).%20SERVICE%20wikibase:label%20{bd:serviceParam%20wikibase:language%20%22` + languageLabel + `%22.}}`
+
+	res, err := http.Get(url)
+
+	if err != nil {
+		// panic(err.Error())
+		fmt.Println(err)
+	}
+
+	body, errB := ioutil.ReadAll(res.Body)
+
+	if errB != nil {
+		// panic(err.Error())
+		fmt.Println(errB)
+	}
+	defer res.Body.Close()
+
+	data := object{}
+	errI := json.Unmarshal(body, &data)
+	if errI != nil {
+		fmt.Println(err)
+	}
+
+	for _, p := range data.Results.Bindings {
+		q := fmt.Sprintf("%v", p.Item.Value)
+		idWiki = q[strings.LastIndex(q, "/")+1:]
+	}
+
+	return idWiki
+}
+
 // GetAuthorIDWiki - function that searches for an author and returns the its Wikidata ID
 func GetAuthorIDWiki(authorName string) string {
 	// time.Sleep(300 * time.Millisecond)
 
 	var idWiki, idWikiPT, idWikiEN string
-
-	urlPT := `https://query.wikidata.org/sparql?format=json&query=SELECT%20DISTINCT%20?item%20WHERE%20{?item%20wdt:P31%20wd:Q5.%20?item%20?label%20"` + authorName + `"@pt%20FILTER(BOUND(?item)).%20SERVICE%20wikibase:label%20{bd:serviceParam%20wikibase:language%20%22pt%22.}}`
-
-	resPT, errPT := http.Get(urlPT)
-
-	if errPT != nil {
-		// panic(err.Error())
-		fmt.Println(errPT)
+	languageLabel := map[string]string{
+		"pt": "pt",
+		"en": "en",
 	}
 
-	bodyPT, errBPT := ioutil.ReadAll(resPT.Body)
+	idWikiPT = GetData(authorName, languageLabel["pt"])
 
-	if errBPT != nil {
-		// panic(err.Error())
-		fmt.Println(errBPT)
-	}
-	defer resPT.Body.Close()
-
-	dataPT := object{}
-	errIPT := json.Unmarshal(bodyPT, &dataPT)
-	if errIPT != nil {
-		fmt.Println(errIPT)
-	}
-
-	urlEN := `https://query.wikidata.org/sparql?format=json&query=SELECT%20DISTINCT%20?item%20WHERE%20{?item%20wdt:P31%20wd:Q5.%20?item%20?label%20"` + authorName + `"@en%20FILTER(BOUND(?item)).%20SERVICE%20wikibase:label%20{bd:serviceParam%20wikibase:language%20%22en%22.}}`
-
-	resEN, errEN := http.Get(urlEN)
-
-	if errEN != nil {
-		// panic(err.Error())
-		fmt.Println(errEN)
-	}
-
-	bodyEN, errBEN := ioutil.ReadAll(resEN.Body)
-
-	if errBEN != nil {
-		// panic(err.Error())
-		fmt.Println(errBEN)
-	}
-	defer resPT.Body.Close()
-
-	dataEN := object{}
-	errIEN := json.Unmarshal(bodyEN, &dataEN)
-	if errIEN != nil {
-		fmt.Println(errIEN)
-	}
-
-	for _, p := range dataPT.Results.Bindings {
-		q := fmt.Sprintf("%v", p.Item.Value)
-		idWikiPT = q[strings.LastIndex(q, "/")+1:]
-	}
-
-	for _, p := range dataEN.Results.Bindings {
-		q := fmt.Sprintf("%v", p.Item.Value)
-		idWikiEN = q[strings.LastIndex(q, "/")+1:]
-	}
+	idWikiEN = GetData(authorName, languageLabel["en"])
 
 	if len(idWikiPT) > 0 {
 		idWiki = idWikiPT
