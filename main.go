@@ -76,7 +76,7 @@ func main() {
 	// check if database exists
 	//if it doesn't exist, create it
 	// from: https://play.golang.org/p/jxza3pbqq9
-	const TEST_ROOT_URI = "root:@tcp(localhost:3306)/?charset=latin1&autocommit=true"
+	const TEST_ROOT_URI = "root:@tcp(localhost:3306)/?charset=utf8mb4&autocommit=true"
 
 	dba, err := sql.Open("mysql", TEST_ROOT_URI)
 	if err != nil {
