@@ -375,3 +375,75 @@ func ReturnStringProperty(prop string, retrieved_date string, id_library string)
 	}
 	return data
 }
+
+func ReturnIdentifier(prop string, retrieved_date string, id_library string) PString {
+
+	data := PString{
+		MainsnaksString{
+			"value",
+			prop,
+			"external-id",
+			DatavalueString{
+				id_library,
+				"string",
+			},
+		},
+		"statement",
+		"normal",
+		[]References{
+			References{
+				Snaks{
+					[]PRefItem{
+						PRefItem{
+							"value",
+							"P3",
+							"wikibase-item",
+							DatavalueRefItem{
+								ValueRefItem{
+									"item",
+									"Q2",
+									2,
+								},
+								"wikibase-entityid",
+							},
+						},
+					},
+					[]PRefString{
+						PRefString{
+							"value",
+							"P4",
+							"url",
+							DatavalueRefString{
+								"http://urn.bn.pt/nca/unimarc-authorities/marcxchange?id=" + id_library,
+								"string",
+							},
+						},
+					},
+					[]PRefTime{
+						PRefTime{
+							"value",
+							"P7",
+							"time",
+							DatavalueRefTime{
+								ValueRefTime{
+									retrieved_date,
+									0,
+									0,
+									0,
+									11,
+									"http://www.wikidata.org/entity/Q1985727",
+								},
+								"time",
+							},
+						},
+					},
+				},
+				[]string{
+
+					"P3", "P4", "P7",
+				},
+			},
+		},
+	}
+	return data
+}

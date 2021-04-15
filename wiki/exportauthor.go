@@ -200,7 +200,7 @@ func ExportToWiki(authorWikiArray []string) {
 
 			// NOT WORKING YET - should export to the author's page identifiers section
 			// but it is exporting to the declarations section
-			entity.A_Claim.P6 = append(entity.A_Claim.P6, ReturnStringProperty("P6", retrieved_date, id_library))
+			entity.A_Claim.P6 = append(entity.A_Claim.P6, ReturnIdentifier("P6", retrieved_date, id_library))
 
 		}
 
