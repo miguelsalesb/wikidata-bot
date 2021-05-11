@@ -38,7 +38,7 @@ type C_tokensCsfr struct {
 func ConnectToWikidata(client http.Client) string {
 	// Wikidata Bot data
 	const username = "Msalesb@bot"
-	const password = "qav06qt7sip26204bfse8i6mmbe61pjj"
+	const password = "8p1fqeivig0q35u5dnvkjs7qquiiu3ol"
 
 	res, err := client.PostForm("http://127.0.0.1:8181/api.php?", url.Values{
 		"action": {"query"},

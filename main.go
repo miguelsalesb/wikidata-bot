@@ -30,7 +30,7 @@ func main() {
 
 	var tables = []string{"authors", "titles", "occupations"}
 
-	fmt.Print("Do you want to populate Wikidata with some initial properties and entities (yes or no) \n ")
+	fmt.Print("Do you want to populate Wikidata with some initial properties and items (yes or no) \n ")
 	fmt.Scanln(&populate)
 
 	if populate != "yes" && populate != "no" {

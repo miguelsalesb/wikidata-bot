@@ -362,7 +362,6 @@ func GetWikiTitleID(titleLowercase string, authors []string, language string) Wi
 	idW, wMat, idWiki, wMaterial = "", "", "", ""
 	const empty = ""
 
-	// replacer := strings.NewReplacer(" ", "%20", "à", "%C3%9F", "á", "%C3%A1", "â", "%C3%A2", "ã", "%C3%A3", "ä", "%C3%A4", "ç", "%C3%A7", "è", "%C3%A8", "é", "%C3%A9", "ê", "%C3%AA", "ë", "%C3%AB", "ì", "%C3%AC", "í", "%C3%AD", "î", "%C3%AE", "ï", "C3%AF", "ñ", "%C3%B1", "ò", "%C3%B2", "ó", "%C3%B3", "ô", "%C3%B4", "õ", "%C3%B5", "ö", "%C3%B6", "ù", "%C3%B9", "ú", "%C3%BA", "û", "%C3%BB", "ü", "%C3%BC", "ý", "%C3%BD", "\"", "'", "º", "%C2%BA", "ª", "%C2%AA", "&", "%26", ",", "%2C", "!", "%21", "#", "%23", "$", "%24", "%", "%25", "'", "%27", "(", "%28", ")", "%29", "-", "%2D", "[", "%5B", "]", "%5D", "^", "%5E", "_", "%5F", "_", "%60", "{", "%7B", "{", "%7C", "}", "%7D", "\\", "%5C")
 	ti = wiki.Replacer.Replace(titleLowercase)
 
 	if titleLowercase != "" {
