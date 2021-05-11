@@ -195,7 +195,7 @@ func ExportToWiki(authorWikiArray []string) {
 			}
 			// if library author record has any information about its death date, export it
 			if len(death_date_library) > 0 {
-				entity.A_Claim.P2 = append(entity.A_Claim.P1, ReturnTimeProperty("P2", death_date_library, retrieved_date, id_library))
+				entity.A_Claim.P2 = append(entity.A_Claim.P2, ReturnTimeProperty("P2", death_date_library, retrieved_date, id_library))
 			}
 
 			// NOT WORKING YET - should export to the author's page identifiers section
