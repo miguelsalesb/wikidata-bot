@@ -37,4 +37,5 @@ reference URL<br>
 retrieved<br>
 <br>
 The script calculates the probability of an author already existing in Wikidata, and if there is none, it creates a new author entity. It also checks which author's occupations are registered in the author's repository and not in Wikidata and writes that information in the MySQL database, so that it can in a second moment, export the lacking occupations to Wikidata (this part is not yet developed).
-
+<br>
+<a href="https://youtu.be/emYN9E_Zj6Y" target="_blank">Wikidata Bot</a>
