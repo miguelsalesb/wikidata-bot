@@ -1,4 +1,7 @@
 # wikidata-bot
+<br><br>
+Check out the video: <a href="https://youtu.be/emYN9E_Zj6Y" target="_blank">Wikidata Bot</a>
+<br><br>
 This script is not yet complete and was tested using a local Wikidata installation that runs in Docker. It retrieves data from the National Library of Portugal bibliographic and authorities MarcXchange repositories, exports it to Wikidata and to a MySQL database.
 <br>
 Initially, the following data shoud be added to Wikidata:<br>
@@ -37,5 +40,4 @@ reference URL<br>
 retrieved<br>
 <br>
 The script calculates the probability of an author already existing in Wikidata, and if there is none, it creates a new author entity. It also checks which author's occupations are registered in the author's repository and not in Wikidata and writes that information in the MySQL database, so that it can in a second moment, export the lacking occupations to Wikidata (this part is not yet developed).
-<br><br>
-<a href="https://youtu.be/emYN9E_Zj6Y" target="_blank">Wikidata Bot</a>
+
