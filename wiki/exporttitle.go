@@ -65,9 +65,10 @@ type T_Descriptions struct {
 }
 
 type T_Claims struct {
-	P8  []PItem  `json:"P8,omitempty"`  // Item type
-	P10 []PItem  `json:"P10,omitempty"` // Item Type
-	P9  []*PTime `json:"P9,omitempty"`  // Time type
+	P8  []PItem   `json:"P8,omitempty"`  // Item type
+	P10 []PItem   `json:"P10,omitempty"` // Item Type
+	P9  []*PTime  `json:"P9,omitempty"`  // Time type
+	P6  []PString `json:"P6,omitempty"`  // Entity type
 }
 
 // Entities and properties used to insert the author's and titles data
@@ -188,6 +189,10 @@ func ExportTitle(idLibrary, originalLanguageOfWork, title, originalTitle, author
 	} else {
 		entity.T_Claim.P9 = nil
 	}
+
+	// NOT WORKING YET - should export to the author's page identifiers section
+	// but it is exporting to the declarations section
+	entity.T_Claim.P6 = append(entity.T_Claim.P6, ReturnIdentifier("P6", retrieved_date, idLibrary))
 
 	// convert the struct to JSON
 	t, _ := json.Marshal(entity)
